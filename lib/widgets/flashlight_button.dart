@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/flashlight_util.dart';
 
 class FlashlightButton extends StatefulWidget {
   const FlashlightButton({super.key});
@@ -8,20 +9,22 @@ class FlashlightButton extends StatefulWidget {
 }
 
 class _FlashlightButtonState extends State<FlashlightButton> {
-  bool isOn = false;
+  bool isOn = FlashlightUtil.isOn;
 
-  void toggleFlashlight() {
+  Future<void> _toggleFlashlight() async {
+    await FlashlightUtil.toggle();
     setState(() {
-      isOn = !isOn;
+      isOn = FlashlightUtil.isOn;
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () {
         print("flashlight");
-        toggleFlashlight();
+        _toggleFlashlight();
       },
       icon: isOn
           ? Icon(Icons.flashlight_off_rounded, color: Colors.white, size: 40)
