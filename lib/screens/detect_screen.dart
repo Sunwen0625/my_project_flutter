@@ -16,7 +16,9 @@ class _DetectState extends State<Detect> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ProjectAppbar(),
-      body: const Center(child: Text("主要內容區域")),
+      body: const Center(
+          child: Text("主要內容區域")
+      ),
       floatingActionButton: SizedBox(
         width: 90,
         height: 90,

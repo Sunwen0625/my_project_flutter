@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/screens/detect.dart';
+import 'package:my_project/screens/detect_screen.dart';
 
 void main() {
   runApp(const MyApp());
