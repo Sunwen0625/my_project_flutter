@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../components/project_appbar.dart';
+
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,7 +14,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      appBar: ProjectAppbar() ,
       backgroundColor : Colors.grey,
       body: Center(
         child: Column(
