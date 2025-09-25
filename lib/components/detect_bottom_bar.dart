@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/flashlight_button.dart';
-import '../widgets/setting_button.dart';
+import '../widgets/info_button.dart';
 
 
 class DetectBottomBar extends StatelessWidget {
@@ -14,7 +14,8 @@ class DetectBottomBar extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: const[
           Expanded(child: Align(alignment: Alignment.center, child: FlashlightButton(),)),
-          Expanded(child: Align(alignment: Alignment.center, child: SettingButton(),))
+          Expanded(child: Align(alignment: Alignment.center )),
+          Expanded(child: Align(alignment: Alignment.center, child: InfoButton(),))
 
 
         ]

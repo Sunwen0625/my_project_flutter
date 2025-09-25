@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/providers/gps_provider.dart';
 import 'package:my_project/screens/detect_screen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+      MultiProvider(providers: [
+        ChangeNotifierProvider(create: (_) => GpsProvider()),
+      ],
+        child: const MyApp(),
+      )
+  );
 }
 
 class MyApp extends StatelessWidget {
