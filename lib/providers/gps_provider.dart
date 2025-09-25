@@ -12,6 +12,7 @@ class GpsProvider  with ChangeNotifier {
       Position pos = await LocationUtils.getCurrentPosition();
       lat = pos.latitude.toString();
       long = pos.longitude.toString();
+      print("lat: ${lat} -- long: ${long}");
       notifyListeners(); // 通知 UI 更新
     } catch (e) {
       print("⚠️ 取得定位失敗：$e");

@@ -34,10 +34,12 @@ class _DetectState extends State<Detect> {
       ),
       body: Consumer<InfoPageProvider>(
         builder: (context, info, child) {
-          return Center(
-            child: info.showInfo
-                ? const DisplayDetect()
-                : const DisplayGps(),
+          return IndexedStack(
+            index: info.pageIndex,
+            children: const [
+              DisplayDetect(), // A頁
+              DisplayGps()   // B頁
+            ],
           );
         }
       ),

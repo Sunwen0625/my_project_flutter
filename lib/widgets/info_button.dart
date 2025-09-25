@@ -20,9 +20,9 @@ class _InfoButtonState extends State<InfoButton> {
             onPressed: () {
               print("info");
 
-              info.toggleInfo();
+              info.togglePage();
             },
-            icon: info.showInfo
+            icon: info.pageIndex==1
                 ? const Icon(Icons.info_outline, color: Colors.white, size: 40)
                 : const Icon(Icons.info, color: Colors.white, size: 40),
           );

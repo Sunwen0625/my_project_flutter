@@ -3,12 +3,12 @@
 import 'package:flutter/cupertino.dart';
 
 class InfoPageProvider with ChangeNotifier{
-  bool _showInfo = false;
+  int _pageIndex = 0; // 0 = A頁, 1 = B頁
 
-  bool get showInfo => _showInfo;
+  int get pageIndex => _pageIndex;
 
-  void toggleInfo(){
-    _showInfo = !_showInfo;
+  void togglePage() {
+    _pageIndex = _pageIndex == 0 ? 1 : 0;
     notifyListeners();
   }
 }
