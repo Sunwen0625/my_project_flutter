@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/components/display_gps.dart';
+import 'package:provider/provider.dart';
+
+import '../components/display_detect.dart';
+import '../components/display_gps.dart';
+import '../providers/info_provider.dart';
 import '../widgets/camera_button.dart';
-
-
 import '../components/detect_bottom_bar.dart';
 
 class Detect extends StatefulWidget {
@@ -13,6 +15,14 @@ class Detect extends StatefulWidget {
 }
 
 class _DetectState extends State<Detect> {
+  bool showInfo = false;
+
+  void toggleInfo() {
+    setState(() {
+      showInfo = !showInfo;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,8 +32,14 @@ class _DetectState extends State<Detect> {
         backgroundColor: Colors.deepPurple,
         foregroundColor: Colors.white,
       ),
-      body: const Center(
-          child: DisplayGps()
+      body: Consumer<InfoPageProvider>(
+        builder: (context, info, child) {
+          return Center(
+            child: info.showInfo
+                ? const DisplayDetect()
+                : const DisplayGps(),
+          );
+        }
       ),
       floatingActionButton: SizedBox(
         width: 90,

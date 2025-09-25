@@ -16,8 +16,6 @@ class DetectBottomBar extends StatelessWidget {
           Expanded(child: Align(alignment: Alignment.center, child: FlashlightButton(),)),
           Expanded(child: Align(alignment: Alignment.center )),
           Expanded(child: Align(alignment: Alignment.center, child: InfoButton(),))
-
-
         ]
       )
     );
