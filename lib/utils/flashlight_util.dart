@@ -17,22 +17,4 @@ class FlashlightUtil {
       print("Flashlight error: $e");
     }
   }
-
-  static Future<void> turnOn() async {
-    try {
-      await TorchLight.enableTorch();
-      _isOn = true;
-    } on Exception catch (e) {
-      print("Flashlight error: $e");
-    }
-  }
-
-  static Future<void> turnOff() async {
-    try {
-      await TorchLight.disableTorch();
-      _isOn = false;
-    } on Exception catch (e) {
-      print("Flashlight error: $e");
-    }
-  }
 }
