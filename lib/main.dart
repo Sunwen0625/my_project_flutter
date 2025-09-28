@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/providers/gps_provider.dart';
+import 'package:my_project/providers/detect_provider.dart';
 import 'package:my_project/providers/info_provider.dart';
 import 'package:my_project/screens/detect_screen.dart';
 import 'package:provider/provider.dart';
@@ -7,8 +7,8 @@ import 'package:provider/provider.dart';
 void main() {
   runApp(
       MultiProvider(providers: [
-        ChangeNotifierProvider(create: (_) => GpsProvider()),
         ChangeNotifierProvider(create: (_) => InfoPageProvider()),
+        ChangeNotifierProvider(create: (_) => DetectProvider()),
       ],
         child: const MyApp(),
       )
