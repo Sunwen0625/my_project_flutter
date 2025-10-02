@@ -15,8 +15,12 @@ class DisplayGps extends StatelessWidget {
           child: Center(
             child: Column(
               children: [
+                const SizedBox(height: 20),
                 const Text("📍 GPS Info:"),
-                Text("lat: ${detect.lat ?? "??"} -- long: ${detect.long ?? "??"}"),
+                Text("lat: ${detect.latString ?? "??"} -- long: ${detect.lngString ?? "??"}"),
+                const SizedBox(height: 20),
+                const Text("📍 Address:"),
+                Text(detect.address ?? "No address yet"),
                 const SizedBox(height: 20),
                 const Text("📷 Last Capture:"),
                 if (detect.lastCapture != null)

@@ -39,14 +39,19 @@ class _CameraYoloDetectState extends State<CameraYoloDetect> {
           Center(child: CircularProgressIndicator())
         else
             YOLOView(
-            modelPath: 'yolov8n_int8',
+            modelPath: 'yolo11n_int8',
+              //modelPath: 'redline_int8',
             task: YOLOTask.detect,
             controller: detect.controller,
             onResult: (results) {
-            print('Found ${results.length} objects!');
-            for (final result in results) {
-            print('${result.className}: ${result.confidence}');
-            }},
+              print('Found ${results.length} objects!');
+              final detectedClassList = <String>[];
+              for (final result in results) {
+                print('${result.className}: ${result.confidence}');
+                detectedClassList.add(result.className);
+              }
+              detect.updateResults(detectedClassList);
+            },
             )
       ]);
 
