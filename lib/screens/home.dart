@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
               borderRadius: BorderRadius.circular(16),
               child: Image.asset(
                   width:150 ,
-                  'assets/images/logo.jpg',
+                  'android/app/src/main/assets/images/logo.jpg',
                   fit: BoxFit.cover
               ),
             ),
