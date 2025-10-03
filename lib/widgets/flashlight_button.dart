@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../utils/flashlight_util.dart';
+import '../providers/detect_provider.dart';
+import 'package:provider/provider.dart';
 
 class FlashlightButton extends StatefulWidget {
   const FlashlightButton({super.key});
@@ -9,24 +10,17 @@ class FlashlightButton extends StatefulWidget {
 }
 
 class _FlashlightButtonState extends State<FlashlightButton> {
-  bool isOn = FlashlightUtil.isOn;
-
-  Future<void> _toggleFlashlight() async {
-    await FlashlightUtil.toggle();
-    setState(() {
-      isOn = FlashlightUtil.isOn;
-    });
-  }
 
 
   @override
   Widget build(BuildContext context) {
+    final cameraProvider = context.watch<DetectProvider>();
     return IconButton(
       onPressed: () {
         print("flashlight");
-        _toggleFlashlight();
+        cameraProvider.toggleFlashlight();
       },
-      icon: isOn
+      icon: cameraProvider.isFlashlightOn
           ? Icon(Icons.flashlight_off_rounded, color: Colors.white, size: 40)
           : Icon(Icons.flashlight_on_rounded, color: Colors.white, size: 40),
     );

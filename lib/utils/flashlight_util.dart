@@ -1,17 +1,13 @@
-import 'package:torch_light/torch_light.dart';
+import 'package:ultralytics_yolo/yolo_view.dart';
 
 class FlashlightUtil {
   static bool _isOn = false;
 
   static bool get isOn => _isOn;
 
-  static Future<void> toggle() async {
+  static Future<void> toggle(YOLOViewController controller) async {
     try {
-      if (_isOn) {
-        await TorchLight.disableTorch();
-      } else {
-        await TorchLight.enableTorch();
-      }
+      await controller.toggleFlashlight(_isOn);
       _isOn = !_isOn;
     } on Exception catch (e) {
       print("Flashlight error: $e");

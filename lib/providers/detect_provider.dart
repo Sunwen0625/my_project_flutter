@@ -1,5 +1,3 @@
-
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:geocoding/geocoding.dart';
@@ -8,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:ultralytics_yolo/yolo_view.dart';
 
 import '../utils/capture_util.dart';
+import '../utils/flashlight_util.dart';
 import '../utils/location_utils.dart';
 
 class DetectProvider with ChangeNotifier{
@@ -32,6 +31,18 @@ class DetectProvider with ChangeNotifier{
       notifyListeners(); // 更新地址
     } catch (e) {
       print("⚠️ 取得定位失敗 或 地址失敗：$e");
+    }
+  }
+
+  // 開關手電筒
+  bool isFlashlightOn = false;
+  Future<void> toggleFlashlight() async {
+    try {
+      await FlashlightUtil.toggle(controller);
+      isFlashlightOn = FlashlightUtil.isOn;
+      notifyListeners(); // 通知 UI 更新
+    } catch (e) {
+      print("Flashlight toggle error: $e");
     }
   }
 
