@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../components/display_detect.dart';
-import '../components/display_gps.dart';
-import '../providers/info_provider.dart';
 import '../widgets/camera_button.dart';
 import '../components/detect_bottom_bar.dart';
 
-class Detect extends StatefulWidget {
-  const Detect({super.key});
+class DetectScreen extends StatefulWidget {
+  const DetectScreen({super.key});
 
   @override
-  State<Detect> createState() => _DetectState();
+  State<DetectScreen> createState() => _DetectScreenState();
 }
 
-class _DetectState extends State<Detect> {
+class _DetectScreenState extends State<DetectScreen> {
   bool showInfo = false;
 
   void toggleInfo() {
@@ -32,17 +29,7 @@ class _DetectState extends State<Detect> {
         backgroundColor: Colors.deepPurple,
         foregroundColor: Colors.white,
       ),
-      body: Consumer<InfoPageProvider>(
-        builder: (context, info, child) {
-          return IndexedStack(
-            index: info.pageIndex,
-            children: const [
-              DisplayDetect(), // A頁
-              DisplayGps()   // B頁
-            ],
-          );
-        }
-      ),
+      body: DisplayDetect(),
       floatingActionButton: SizedBox(
         width: 90,
         height: 90,

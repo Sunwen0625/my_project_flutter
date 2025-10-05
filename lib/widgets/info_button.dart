@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../providers/info_provider.dart';
 
 class InfoButton extends StatefulWidget {
   const InfoButton({super.key});
@@ -14,19 +12,19 @@ class _InfoButtonState extends State<InfoButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<InfoPageProvider>(
-        builder: (context, info, child) {
-          return IconButton(
-            onPressed: () {
-              print("info");
-
-              info.togglePage();
-            },
-            icon: info.pageIndex==1
-                ? const Icon(Icons.info_outline, color: Colors.white, size: 40)
-                : const Icon(Icons.info, color: Colors.white, size: 40),
-          );
+    return IconButton(
+      onPressed: () {
+        print("info");
+        String? currentRoute = ModalRoute.of(context)?.settings.name;
+        print("目前頁面: $currentRoute");
+        if (currentRoute =="/"||currentRoute == '/detect') {
+          Navigator.pushNamed(context, '/info');
+        }else{
+          Navigator.pop(context);
         }
+
+      },
+      icon: const Icon(Icons.info_outline, color: Colors.white, size: 40)
 
     );
   }
