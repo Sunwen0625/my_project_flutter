@@ -24,6 +24,7 @@ class CameraButton extends StatelessWidget {
           print(message);
 
         }
+        // 通知
         if (!detected.contains('laptop')) {
           //if (!detected.contains('red')) {
           showCustomOverlay(

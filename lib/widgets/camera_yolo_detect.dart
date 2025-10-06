@@ -15,6 +15,7 @@ class CameraYoloDetect extends StatefulWidget {
 class _CameraYoloDetectState extends State<CameraYoloDetect> {
   bool isPermissionGranted = false;
 
+
   @override
   void initState() {
     super.initState();
@@ -38,21 +39,25 @@ class _CameraYoloDetectState extends State<CameraYoloDetect> {
         if (!isPermissionGranted)
           Center(child: CircularProgressIndicator())
         else
-            YOLOView(
-            modelPath: 'yolo11n_int8',
-              //modelPath: 'redline_int8',
-            task: YOLOTask.detect,
-            controller: detect.controller,
-            onResult: (results) {
-              print('Found ${results.length} objects!');
-              final detectedClassList = <String>[];
-              for (final result in results) {
-                print('${result.className}: ${result.confidence}');
-                detectedClassList.add(result.className);
-              }
-              detect.updateResults(detectedClassList);
-            },
-            )
+             YOLOView(
+              modelPath: 'yolo11n_int8',
+                //modelPath: 'redline_int8',
+              task: YOLOTask.detect,
+              controller: detect.controller,
+              onResult: (results) {
+                print('Found ${results.length} objects!');
+                final detectedClassList = <String>[];
+
+                for (final result in results) {
+                  print('${result.className}: ${result.confidence}');
+                  print('this is bounding box: ${result.boundingBox}');
+                  detectedClassList.add(result.className);
+                  detect.getResult(result);
+                }
+                detect.updateResults(detectedClassList);
+              },
+              ),
+
       ]);
 
 
