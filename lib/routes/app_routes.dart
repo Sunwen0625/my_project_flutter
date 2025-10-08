@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../screens/detect_screen.dart';
 import '../screens/home.dart';
 import '../screens/info_screen.dart';
+import '../screens/tracking_screen.dart';
 
 
 class AppRoutes {
@@ -9,11 +10,16 @@ class AppRoutes {
   static const String detect = '/';
   static const String home = '/home';
   static const String info = '/info';
+  static const String tracking = '/tracking';
+  static const String history = '/history';
+
 
   // 路由表
   static Map<String, WidgetBuilder> routes = {
     detect: (context) => DetectScreen(),
     home: (context) => HomePage(),
     info: (context) => InfoScreen(),
+    tracking: (context) => TrackingScreen(),
+    //history: (context) => HistoryScreen(),
   };
 }

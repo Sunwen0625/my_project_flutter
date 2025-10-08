@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/models/detection.dart';
 import 'package:ultralytics_yolo/ultralytics_yolo.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/detect_provider.dart';
+import '../providers/track_provider.dart';
+import '../trackers/centroid_tracker.dart';
 import '../utils/permission_utils.dart';
 
 class CameraYoloDetect extends StatefulWidget {
@@ -14,7 +17,7 @@ class CameraYoloDetect extends StatefulWidget {
 
 class _CameraYoloDetectState extends State<CameraYoloDetect> {
   bool isPermissionGranted = false;
-
+  final tracker = CentroidTracker();
 
   @override
   void initState() {
@@ -34,6 +37,8 @@ class _CameraYoloDetectState extends State<CameraYoloDetect> {
   @override
   Widget build(BuildContext context) {
     final detect = context.read<DetectProvider>();
+    final track = context.read<TrackProvider>();
+
     return Stack(
       children: [
         if (!isPermissionGranted)
@@ -47,6 +52,20 @@ class _CameraYoloDetectState extends State<CameraYoloDetect> {
               onResult: (results) {
                 print('Found ${results.length} objects!');
                 final detectedClassList = <String>[];
+
+                final detections = results.map<Detection>((r) {
+                  final box = r.normalizedBox;
+                  return Detection(
+                    label: r.className,
+                    score: (r.confidence).toDouble(),
+                    left: box.left.toDouble(),
+                    top: box.top.toDouble(),
+                    right: box.right.toDouble(),
+                    bottom: box.bottom.toDouble(),
+                  );
+                }).toList();
+
+                track.updateDetections(detections);
 
                 for (final result in results) {
                   print('${result.className}: ${result.confidence}');
