@@ -22,6 +22,17 @@ class DisplayInfo extends StatelessWidget {
                   const Text("No picture yet"),
 
                 const SizedBox(height: 20),
+                const Text("📷 Last Capture cropped:"),
+                if (detect.cropped != null)
+                  Image.file(detect.cropped!, height: 300)
+                else
+                  const Text("No picture yet"),
+
+
+                const SizedBox(height: 20),
+                Text(detect.result.normalizedBox.toString()),
+
+                const SizedBox(height: 20),
                 const Text("📍 GPS:"),
                 Text("lat: ${detect.latString ?? "??"} -- long: ${detect.lngString ?? "??"}"),
                 const SizedBox(height: 20),
@@ -34,6 +45,7 @@ class DisplayInfo extends StatelessWidget {
                 const SizedBox(height: 20),
                 const Text("🔍 車牌號碼 :"),
                 Text("xxx-xxxx"),
+                Text(detect.ocrText),
                 const SizedBox(height: 20),
                 ElevatedButton(onPressed: (){}, child: Text("history detects"))
               ]
