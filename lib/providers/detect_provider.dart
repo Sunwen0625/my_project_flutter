@@ -10,6 +10,7 @@ import '../utils/capture_util.dart';
 import '../utils/flashlight_util.dart';
 import '../utils/image_crop_util.dart';
 import '../utils/location_utils.dart';
+import '../utils/ocr_util.dart';
 
 class DetectProvider with ChangeNotifier{
   final controller = YOLOViewController();
@@ -79,7 +80,7 @@ class DetectProvider with ChangeNotifier{
     notifyListeners();
   }
 
-
+  //裁切圖片
   File? cropped;
   Future<void> cropImage() async{
     if (lastCapture == null) {
@@ -92,7 +93,17 @@ class DetectProvider with ChangeNotifier{
           imageFile: imageFile, normalizedBox: result.normalizedBox);
       notifyListeners();
       print("🔍 裁切結果: $cropped");
+
+      getOCRText();
     }
   }
+
+  //文字辨識
+  String ocrText = "";
+  Future<String> getOCRText() async {
+    ocrText = await OcrUtil.recognizeText(cropped!);
+    return ocrText;
+  }
+
 
 }
