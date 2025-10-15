@@ -3,8 +3,6 @@ import 'package:provider/provider.dart';
 
 
 import '../providers/detect_provider.dart';
-import 'custom_overlay.dart';
-
 
 
 class CameraButton extends StatelessWidget {

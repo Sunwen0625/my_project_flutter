@@ -5,7 +5,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:my_project/utils/current_time_utils.dart';
 import 'package:ultralytics_yolo/ultralytics_yolo.dart';
-import 'package:ultralytics_yolo/widgets/yolo_controller.dart';
+
 
 import '../utils/capture_util.dart';
 import '../utils/flashlight_util.dart';
@@ -72,6 +72,7 @@ class DetectProvider with ChangeNotifier {
       _pendingCrop = true;
       debugPrint("📸 拍照完成: ${file.path}");
       notifyListeners();
+      getCurrentTime();
     } else {
       debugPrint("⚠️ 拍照失敗");
     }
