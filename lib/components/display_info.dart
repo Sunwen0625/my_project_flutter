@@ -23,14 +23,35 @@ class DisplayInfo extends StatelessWidget {
 
                 const SizedBox(height: 20),
                 const Text("📷 Last Capture cropped:"),
-                if (detect.cropped != null)
-                  Image.file(detect.cropped!, height: 300)
+                if (detect.croppedList.isNotEmpty)
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: detect.croppedList.map((obj) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.file(
+                            obj.file,
+                            width: 120,
+                            height: 120,
+                            fit: BoxFit.cover,
+                            key: ValueKey(obj.file.path), // 🔑 防快取
+                          ),
+                          Text(
+                            "${obj.label} (${(obj.confidence * 100).toStringAsFixed(1)}%)",
+                            style: const TextStyle(fontSize: 12),
+                          ),
+                        ],
+                      );
+                    }).toList(),
+                  )
                 else
-                  const Text("No picture yet"),
+                  const Text("尚未裁切圖片"),
 
 
                 const SizedBox(height: 20),
-                Text(detect.result.normalizedBox.toString()),
+                Text(detect.results.toString()),
 
                 const SizedBox(height: 20),
                 const Text("📍 GPS:"),

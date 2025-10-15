@@ -39,6 +39,7 @@ class _CameraYoloDetectState extends State<CameraYoloDetect> {
     final detect = context.read<DetectProvider>();
     final track = context.read<TrackProvider>();
 
+
     return Stack(
       children: [
         if (!isPermissionGranted)
@@ -50,9 +51,8 @@ class _CameraYoloDetectState extends State<CameraYoloDetect> {
               task: YOLOTask.detect,
               controller: detect.controller,
               onResult: (results) {
-                print('Found ${results.length} objects!');
-                final detectedClassList = <String>[];
 
+                print('Found ${results.length} objects!');
                 final detections = results.map<Detection>((r) {
                   final box = r.normalizedBox;
                   return Detection(
@@ -65,15 +65,14 @@ class _CameraYoloDetectState extends State<CameraYoloDetect> {
                   );
                 }).toList();
 
-                track.updateDetections(detections);
+                track.updateDetections(detections); //更新物件追中
 
                 for (final result in results) {
                   print('${result.className}: ${result.confidence}');
                   print('this is bounding box: ${result.boundingBox}');
-                  detectedClassList.add(result.className);
-                  detect.getResult(result);
+
                 }
-                detect.updateResults(detectedClassList);
+                detect.getResult(results);
               },
               ),
 

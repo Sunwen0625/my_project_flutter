@@ -12,7 +12,13 @@ void main() {
   runApp(
       MultiProvider(providers: [
         ChangeNotifierProvider(create: (_) => DetectProvider()),
-        ChangeNotifierProvider(create: (_) => TrackProvider()),
+        ChangeNotifierProxyProvider<DetectProvider,TrackProvider>(
+          create: (_) => TrackProvider(),
+          update: (_, detect, track) {
+            track!.setDetect(detect);
+            return track;
+            },
+        ),
       ],
         child: const MyApp(),
       )

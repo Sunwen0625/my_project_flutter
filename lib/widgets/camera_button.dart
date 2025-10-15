@@ -17,6 +17,7 @@ class CameraButton extends StatelessWidget {
       onPressed: () {
         context.read<DetectProvider>().captureImage();
         context.read<DetectProvider>().fetchLocation();
+        /*
         final detected = context.read<DetectProvider>().detectedClasses;
 
         if (detected.isNotEmpty) {
@@ -24,6 +25,9 @@ class CameraButton extends StatelessWidget {
           print(message);
 
         }
+        */
+
+        /*
         // 通知
         if (!detected.contains('laptop')) {
           //if (!detected.contains('red')) {
@@ -33,6 +37,8 @@ class CameraButton extends StatelessWidget {
             backgroundColor: Colors.redAccent  ,
           );
         }
+        */
+
       },
       shape: const CircleBorder(),
       child: const Icon(Icons.camera_alt, size: 40),

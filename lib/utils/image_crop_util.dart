@@ -4,12 +4,11 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 
 class ImageCropUtil {
-  /// 根據 YOLO 偵測框 (Rect) 進行裁切
-  static Future<File> cropByRect({
+  static Future<File> cropByNormalizedBox({
     required File imageFile,
     required Rect normalizedBox,
+    int? index,
   }) async {
-    //轉換圖片
     final bytes = await imageFile.readAsBytes();
     final image = img.decodeImage(bytes);
     if (image == null) throw Exception("無法讀取圖片");
@@ -35,17 +34,15 @@ class ImageCropUtil {
       height: cropH,
     );
 
-
+    // 🔹 儲存
     final dir = await getTemporaryDirectory();
-    final croppedPath =
-        "${dir.path}/crop_${ DateTime.now().millisecondsSinceEpoch}.png";
-    final croppedFile = File(croppedPath);
+    final path = "${dir.path}/crop_${index! + DateTime.now().millisecondsSinceEpoch}.png";
+    final croppedFile = File(path);
     await croppedFile.writeAsBytes(img.encodePng(cropped));
 
     print("📏 原圖大小: ${imgW}x${imgH}");
     print("🔹 normalizedBox: $normalizedBox");
     print("🎯 實際裁切座標: (${left.round()}, ${top.round()}) → ${cropW}x${cropH}");
-
 
     return croppedFile;
   }
