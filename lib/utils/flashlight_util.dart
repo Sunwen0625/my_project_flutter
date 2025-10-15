@@ -1,4 +1,5 @@
-import 'package:ultralytics_yolo/yolo_view.dart';
+import 'package:ultralytics_yolo/widgets/yolo_controller.dart';
+
 
 class FlashlightUtil {
   static bool _isOn = false;
@@ -7,7 +8,7 @@ class FlashlightUtil {
 
   static Future<void> toggle(YOLOViewController controller) async {
     try {
-      await controller.toggleFlashlight(_isOn);
+     // await controller.toggleFlashlight(_isOn);
       _isOn = !_isOn;
     } on Exception catch (e) {
       print("Flashlight error: $e");

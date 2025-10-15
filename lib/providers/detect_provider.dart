@@ -3,13 +3,16 @@ import 'dart:io';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:my_project/utils/current_time_utils.dart';
 import 'package:ultralytics_yolo/ultralytics_yolo.dart';
+import 'package:ultralytics_yolo/widgets/yolo_controller.dart';
 
 import '../utils/capture_util.dart';
 import '../utils/flashlight_util.dart';
 import '../utils/image_crop_util.dart';
 import '../utils/location_utils.dart';
 import '../utils/ocr_util.dart';
+
 
 class DetectProvider with ChangeNotifier {
   final controller = YOLOViewController();
@@ -38,13 +41,12 @@ class DetectProvider with ChangeNotifier {
       debugPrint("⚠️ 取得定位失敗 或 地址失敗：$e");
     }
   }
-  DateTime _dateTime = DateTime.now();
-  DateTime get dateTime => _dateTime;
 
-  //time
-  Future<void> currentTime() async {
-    // xxxx/xx/xx xx:xx
-    _dateTime = DateTime.now();
+  String dateTimeString = "";
+  // 取得時間
+  Future<void> getCurrentTime() async {
+    final currentTime  = CurrentTimeUtils().getCurrentDateTime();
+    dateTimeString = currentTime;
     notifyListeners();
   }
 
@@ -99,7 +101,7 @@ class DetectProvider with ChangeNotifier {
 
   //裁切圖片(可多張)
   // 裁切結果（多張）
-  List<_CroppedObject> _croppedList = [];
+  final List<_CroppedObject> _croppedList = [];
   List<_CroppedObject> get croppedList => _croppedList;
 
   Future<void> cropAllDetectedObjects() async {

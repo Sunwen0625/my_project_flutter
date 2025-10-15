@@ -61,8 +61,7 @@ class DisplayInfo extends StatelessWidget {
                 Text(detect.address ?? "No address yet"),
                 const SizedBox(height: 20),
                 const Text("📅 日期時間:"),
-                //TODO 這裡要改成日期時間
-                Text("xxxx/xx/xx xx:xx"),
+                Text(detect.dateTimeString ),
                 const SizedBox(height: 20),
                 const Text("🔍 車牌號碼 :"),
                 Text("xxx-xxxx"),

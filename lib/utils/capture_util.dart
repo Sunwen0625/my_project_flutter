@@ -2,7 +2,8 @@
 import 'dart:io';
 
 import 'package:path_provider/path_provider.dart';
-import 'package:ultralytics_yolo/yolo_view.dart';
+import 'package:ultralytics_yolo/widgets/yolo_controller.dart';
+
 
 class CaptureUtil{
   static Future<File?> getCapture(YOLOViewController controller) async {
