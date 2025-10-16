@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/providers/photo_provider.dart';
 import 'package:my_project/providers/track_provider.dart';
 import 'package:my_project/routes/app_routes.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,7 @@ void main() {
             return track;
             },
         ),
+        ChangeNotifierProvider(create: (_) => PhotoProvider()),
       ],
         child: const MyApp(),
       )

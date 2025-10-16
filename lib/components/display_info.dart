@@ -67,7 +67,9 @@ class DisplayInfo extends StatelessWidget {
                 Text("xxx-xxxx"),
                 Text(detect.ocrText),
                 const SizedBox(height: 20),
-                ElevatedButton(onPressed: (){}, child: Text("history detects")),
+                ElevatedButton(onPressed: (){
+                  Navigator.pushNamed(context, '/historyList');
+                }, child: Text("history detects")),
                 const SizedBox(height: 10),
                 ElevatedButton(onPressed: (){
                   Navigator.pushNamed(context, '/tracking');
