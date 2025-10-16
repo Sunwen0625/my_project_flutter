@@ -12,15 +12,16 @@ class PhotoListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final photoProvider = Provider.of<PhotoProvider>(context);
+    final photos = photoProvider.photos.reversed.toList();
 
     return Scaffold(
       appBar: AppBar(title: const Text('照片清單')),
-      body: photoProvider.photos.isEmpty
+      body: photos.isEmpty
           ? const Center(child: Text("目前沒有任何照片"))
           : ListView.builder(
-        itemCount: photoProvider.photos.length,
+        itemCount: photos.length,
         itemBuilder: (context, index) {
-          final photo = photoProvider.photos[index];
+          final photo = photos[index];
           return PhotoCard(
             photo: photo,
             onTap: () {
