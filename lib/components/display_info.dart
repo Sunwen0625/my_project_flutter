@@ -65,7 +65,7 @@ class DisplayInfo extends StatelessWidget {
                 const SizedBox(height: 20),
                 const Text("🔍 車牌號碼 :"),
                 Text("xxx-xxxx"),
-                Text(detect.ocrText),
+                Text(detect.ocrText!),
                 const SizedBox(height: 20),
                 ElevatedButton(onPressed: (){
                   Navigator.pushNamed(context, '/historyList');

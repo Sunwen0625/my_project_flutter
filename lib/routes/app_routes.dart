@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/screens/photo_detail_page.dart';
 import 'package:my_project/screens/photo_list_page.dart';
 import '../screens/detect_screen.dart';
 import '../screens/home.dart';

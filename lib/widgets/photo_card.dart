@@ -25,8 +25,8 @@ class PhotoCard extends StatelessWidget {
             // 圖片
             ClipRRect(
               borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-              child: Image.asset(
-                photo.imagePath,
+              child: Image.file(
+                photo.cutImagePath,
                 width: double.infinity,
                 height: 180,
                 fit: BoxFit.cover,
@@ -38,10 +38,21 @@ class PhotoCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(photo.date, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Text(
+                    photo.date,
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
                   const SizedBox(height: 4),
-                  Text(photo.address, style: const TextStyle(color: Colors.grey)),
-                ],
+                  Text(
+                    photo.address,
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    "車牌號碼：${photo.licensePlate}",
+                    style: const TextStyle(color: Colors.black87),
+                  ),
+                ]
               ),
             ),
           ],

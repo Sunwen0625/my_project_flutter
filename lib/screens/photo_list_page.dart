@@ -15,7 +15,9 @@ class PhotoListPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('照片清單')),
-      body: ListView.builder(
+      body: photoProvider.photos.isEmpty
+          ? const Center(child: Text("目前沒有任何照片"))
+          : ListView.builder(
         itemCount: photoProvider.photos.length,
         itemBuilder: (context, index) {
           final photo = photoProvider.photos[index];

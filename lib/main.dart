@@ -12,7 +12,14 @@ import 'package:my_project/providers/detect_provider.dart';
 void main() {
   runApp(
       MultiProvider(providers: [
-        ChangeNotifierProvider(create: (_) => DetectProvider()),
+        ChangeNotifierProvider(create: (_) => PhotoProvider()),
+        ChangeNotifierProxyProvider<PhotoProvider, DetectProvider>(
+          create: (_) => DetectProvider(),
+          update: (_, photo, detect) {
+            detect!.setPhotoProvider(photo);
+            return detect;
+          },
+        ),
         ChangeNotifierProxyProvider<DetectProvider,TrackProvider>(
           create: (_) => TrackProvider(),
           update: (_, detect, track) {
@@ -20,7 +27,6 @@ void main() {
             return track;
             },
         ),
-        ChangeNotifierProvider(create: (_) => PhotoProvider()),
       ],
         child: const MyApp(),
       )

@@ -1,6 +1,8 @@
+import 'dart:io';
+
 class PhotoModel {
-  final String imagePath;
-  final String cutImagePath;
+  final File imagePath;
+  final File cutImagePath;
   final String date;
   final String address;
   final String longitude;

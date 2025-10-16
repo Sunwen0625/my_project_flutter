@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:my_project/providers/photo_provider.dart';
 import 'package:my_project/utils/current_time_utils.dart';
 import 'package:ultralytics_yolo/ultralytics_yolo.dart';
 
 
+import '../models/photo_model.dart';
 import '../utils/capture_util.dart';
 import '../utils/flashlight_util.dart';
 import '../utils/image_crop_util.dart';
@@ -15,6 +17,11 @@ import '../utils/ocr_util.dart';
 
 
 class DetectProvider with ChangeNotifier {
+
+  PhotoProvider? _photoProvider;
+  void setPhotoProvider(PhotoProvider provider) {
+    _photoProvider = provider;
+  }
   final controller = YOLOViewController();
 
   // 取得 GPS 跟地址
@@ -104,6 +111,7 @@ class DetectProvider with ChangeNotifier {
   // 裁切結果（多張）
   final List<_CroppedObject> _croppedList = [];
   List<_CroppedObject> get croppedList => _croppedList;
+  String? ocrText = "";
 
   Future<void> cropAllDetectedObjects() async {
     if (lastCapture == null) {
@@ -128,13 +136,24 @@ class DetectProvider with ChangeNotifier {
         normalizedBox: result.normalizedBox,
         index:  index,
       );
-      getOCRText(croppedFile);
+      ocrText =await getOCRText(croppedFile);
 
       _croppedList.add(_CroppedObject(
         file: croppedFile,
         label: result.className,
         confidence: result.confidence,
       ));
+      final photo = PhotoModel(
+        imagePath: imageFile,
+        cutImagePath: croppedFile,
+        date: DateTime.now().toString().split('.')[0],
+        address: address ?? '未知地點',
+        longitude: lngString ?? '',
+        latitude: latString ?? '',
+        licensePlate: ocrText??'',
+      );
+
+      _photoProvider?.addPhoto(photo);
 
       debugPrint("✅ 已裁切: ${result.className} → ${croppedFile.path}");
       index++;
@@ -143,13 +162,14 @@ class DetectProvider with ChangeNotifier {
   }
 
   //文字辨識
-  String ocrText = "";
-  Future<void> getOCRText(File cropped) async {
-    ocrText = await OcrUtil.recognizeText(cropped);
-  }
+
+
 }
 
-
+Future<String?> getOCRText(File cropped) async {
+  var ocrText = await OcrUtil.recognizeText(cropped);
+  return ocrText;
+}
 class _CroppedObject {
   final File file;
   final String label;
