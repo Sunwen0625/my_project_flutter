@@ -11,19 +11,14 @@ class InfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Info"),
+        title: const Text("使用者個人資訊"),
         centerTitle: true,
         backgroundColor: Colors.deepPurple,
         foregroundColor: Colors.white,
         automaticallyImplyLeading: false,
       ),
-      body:SingleChildScrollView(
-        child:Column(
-          children: [
-            DisplayInfo(),
-          ],
-        ),
-      ),
+      body:DisplayInfo(),
+
       bottomNavigationBar: DetectBottomBar(),
 
     );
