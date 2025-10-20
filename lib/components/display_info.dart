@@ -11,73 +11,50 @@ class DisplayInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<DetectProvider>(
       builder: (context, detect, child) {
-        return  Center(
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-                const Text("📷 Last Capture:"),
-                if (detect.lastCapture != null)
-                  Image.file(detect.lastCapture!, height: 300)
-                else
-                  const Text("No picture yet"),
-
-                const SizedBox(height: 20),
-                const Text("📷 Last Capture cropped:"),
-                if (detect.croppedList.isNotEmpty)
-                  Wrap(
-                    spacing: 12,
-                    runSpacing: 12,
-                    children: detect.croppedList.map((obj) {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Image.file(
-                            obj.file,
-                            width: 120,
-                            height: 120,
-                            fit: BoxFit.cover,
-                            key: ValueKey(obj.file.path), // 🔑 防快取
-                          ),
-                          Text(
-                            "${obj.label} (${(obj.confidence * 100).toStringAsFixed(1)}%)",
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                        ],
-                      );
-                    }).toList(),
-                  )
-                else
-                  const Text("尚未裁切圖片"),
-
-
-                const SizedBox(height: 20),
-                Text(detect.results.toString()),
-
-                const SizedBox(height: 20),
-                const Text("📍 GPS:"),
-                Text("lat: ${detect.latString ?? "??"} -- long: ${detect.lngString ?? "??"}"),
-                const SizedBox(height: 20),
-                const Text("📍 地址:"),
-                Text(detect.address ?? "No address yet"),
-                const SizedBox(height: 20),
-                const Text("📅 日期時間:"),
-                Text(detect.dateTimeString ),
-                const SizedBox(height: 20),
-                const Text("🔍 車牌號碼 :"),
-                Text("xxx-xxxx"),
-                Text(detect.ocrText!),
-                const SizedBox(height: 20),
-                ElevatedButton(onPressed: (){
+        return Center(
+          child: Column(
+            children: [
+              const SizedBox(height: 20),
+              const Text('使用者名稱 : xxx', style: TextStyle(fontSize: 20)),
+              const SizedBox(height: 20),
+              const Text('身分證 : xxxxxxxx', style: TextStyle(fontSize: 20)),
+              const SizedBox(height: 20),
+              const Text('電話 : 09xxxxxxx', style: TextStyle(fontSize: 20)),
+              const SizedBox(height: 40),
+              ElevatedButton(
+                onPressed: () {
                   Navigator.pushNamed(context, '/historyList');
-                }, child: Text("history detects")),
-                const SizedBox(height: 10),
-                ElevatedButton(onPressed: (){
+                },
+                child: const Text("歷史紀錄"),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
                   Navigator.pushNamed(context, '/tracking');
-                }, child: Text("detect_list"))
-              ]
-            ),
-          );
-      }
+                },
+                child: const Text("目前檢測追蹤數量"),
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton( onPressed: () {  }, child: Text("修改設定")),
+              const Spacer(), // 👈 登出永遠在最下方
+              ElevatedButton(
+                onPressed: () {
+                  // 登出邏輯
+                },
+                style: ButtonStyle(
+                  backgroundColor: WidgetStateProperty.all(Colors.red), 
+                  foregroundColor: WidgetStateProperty.all(Colors.white),
+                  padding: WidgetStateProperty.all(
+                    const EdgeInsets.symmetric(vertical: 16, horizontal: 40),
+                  ),
+                ),
+                child: const Text("登出", style: TextStyle(fontSize: 18)),
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
+        );
+      },
     );
   }
 }
