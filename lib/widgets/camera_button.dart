@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/providers/state_provider.dart';
 import 'package:provider/provider.dart';
 
 
-import '../providers/detect_provider.dart';
+
 
 
 class CameraButton extends StatelessWidget {
@@ -11,35 +12,45 @@ class CameraButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () {
-        context.read<DetectProvider>().captureImage();
-        context.read<DetectProvider>().fetchLocation();
-        /*
-        final detected = context.read<DetectProvider>().detectedClasses;
+    return Consumer<StateProvider>(
+      builder: (context, state, child) {
+        return FloatingActionButton(
+          onPressed: () {
+            state.toggleCamera();
+            /*
+          final detected = context.read<DetectProvider>().detectedClasses;
 
-        if (detected.isNotEmpty) {
-          final message = "檢測到: ${detected.join(', ')}";
-          print(message);
+          if (detected.isNotEmpty) {
+            final message = "檢測到: ${detected.join(', ')}";
+            print(message);
 
-        }
-        */
+          }
+          */
 
-        /*
-        // 通知
-        if (!detected.contains('laptop')) {
-          //if (!detected.contains('red')) {
-          showCustomOverlay(
-            context,
-            message: "圖片需包含電腦，請重新拍照！",
-            backgroundColor: Colors.redAccent  ,
-          );
-        }
-        */
+            /*
+          // 通知
+          if (!detected.contains('laptop')) {
+            //if (!detected.contains('red')) {
+            showCustomOverlay(
+              context,
+              message: "圖片需包含電腦，請重新拍照！",
+              backgroundColor: Colors.redAccent  ,
+            );
+          }
+          */
+          },
+          shape: const CircleBorder(),
+          backgroundColor: state.isCameraActive ? Colors.red : Colors.blue,
+          child: Icon(
+            state.isCameraActive ? Icons.cancel : Icons.camera_alt,
+            size: 40,
+            color: Colors.white,
+          ),
+        );
 
       },
-      shape: const CircleBorder(),
-      child: const Icon(Icons.camera_alt, size: 40),
+
+
     );
   }
 }

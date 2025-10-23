@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:my_project/providers/state_provider.dart';
 
 import '../providers/detect_provider.dart';
 import 'package:provider/provider.dart';
 
+const menuItem = [
+DropdownMenuItem(
+value: '', child: Text('none')),
+DropdownMenuItem(
+value: 'yolo11n_int8', child: Text('yolo11n_int8')),
+DropdownMenuItem(
+value: 'redline_int8', child: Text('redline_int8')),
+DropdownMenuItem(
+value: 'redline_plus_int8', child: Text('redline_plus_int8')),
+DropdownMenuItem(
+value: 'redline_plus2_int8', child: Text('redline_plus2_int8')),
+];
 
 class DisplayInfo extends StatelessWidget {
   const DisplayInfo({super.key});
@@ -49,7 +62,44 @@ class DisplayInfo extends StatelessWidget {
             onPressed: () {},
             child: const Text("修改設定"),
           ),
-          ElevatedButton(onPressed: () {}, child: Text("開發者模式"),),
+          const SizedBox(height: 10),
+          Consumer<StateProvider>(builder:(context, state, child){
+            return Column(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    state.toggleDevMode();
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(
+                      state.isDevMode ? Colors.green : Colors.red,
+                    ),
+                    foregroundColor: WidgetStateProperty.all(Colors.white),
+                  ),
+                  child: const Text("開發者模式"),
+                ),
+                // 🔽 YOLO 模型選擇（僅在開發者模式開啟時顯示）
+                if (state.isDevMode)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: DropdownButtonFormField<String>(
+                      initialValue: state.selectedYoloModel, // 預設選中的模型（你需要在 StateProvider 裡定義）
+                      decoration: const InputDecoration(
+                        labelText: "選擇 YOLO 模型",
+                        border: OutlineInputBorder(),
+                      ),
+                      items: menuItem,
+                      onChanged: (value) {
+                        if (value != null) {
+                          state.setYoloModel(value); // 這裡去更新選擇的模型
+                        }
+                      },
+                    ),
+                  ),
+
+              ],
+            );
+          }),
 
           const Spacer(), //  登出永遠在最下方
           ElevatedButton(

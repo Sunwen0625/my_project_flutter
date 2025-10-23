@@ -4,6 +4,7 @@ import 'package:ultralytics_yolo/ultralytics_yolo.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/detect_provider.dart';
+import '../providers/state_provider.dart';
 import '../providers/track_provider.dart';
 import '../trackers/centroid_tracker.dart';
 import '../utils/permission_utils.dart';
@@ -38,6 +39,9 @@ class _CameraYoloDetectState extends State<CameraYoloDetect> {
   Widget build(BuildContext context) {
     final detect = context.read<DetectProvider>();
     final track = context.read<TrackProvider>();
+    final model = context.read<StateProvider>().selectedYoloModel;
+
+
 
 
     return Stack(
@@ -46,13 +50,12 @@ class _CameraYoloDetectState extends State<CameraYoloDetect> {
           Center(child: CircularProgressIndicator())
         else
              YOLOView(
-              modelPath: 'yolo11n_int8',
-                //modelPath: 'redline_int8',
+               modelPath: model,
               task: YOLOTask.detect,
               controller: detect.controller,
               onResult: (results) {
 
-                print('Found ${results.length} objects!');
+                debugPrint('Found ${results.length} objects!');
                 final detections = results.map<Detection>((r) {
                   final box = r.normalizedBox;
                   return Detection(
@@ -68,8 +71,8 @@ class _CameraYoloDetectState extends State<CameraYoloDetect> {
                 track.updateDetections(detections); //更新物件追中
 
                 for (final result in results) {
-                  print('${result.className}: ${result.confidence}');
-                  print('this is bounding box: ${result.boundingBox}');
+                  debugPrint('${result.className}: ${result.confidence}');
+                  debugPrint('this is bounding box: ${result.boundingBox}');
 
                 }
                 detect.getResult(results);

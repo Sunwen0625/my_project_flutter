@@ -24,6 +24,10 @@ class DetectProvider with ChangeNotifier {
   }
   final controller = YOLOViewController();
 
+  void changeModel(String modelPath){
+    controller.switchModel(modelPath,YOLOTask.detect);
+  }
+
   // 取得 GPS 跟地址
   String? latString;
   String? lngString;
@@ -160,8 +164,6 @@ class DetectProvider with ChangeNotifier {
     }
     notifyListeners();
   }
-
-  //文字辨識
 
 
 }
