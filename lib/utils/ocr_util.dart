@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
 class OcrUtil {
@@ -24,7 +25,7 @@ class OcrUtil {
 
       return result.text;
     } catch (e) {
-      print("⚠️ OCR 辨識錯誤: $e");
+      debugPrint("⚠️ OCR 辨識錯誤: $e");
       return "OCR 辨識失敗";
     }
   }
@@ -47,8 +48,13 @@ class OcrUtil {
       await textRecognizer.close();
       return blocks;
     } catch (e) {
-      print("⚠️ OCR 區塊辨識錯誤: $e");
+      debugPrint("⚠️ OCR 區塊辨識錯誤: $e");
       return [];
     }
+  }
+
+  static Future<String?> getOCRText(File cropped) async {
+    var ocrText = await OcrUtil.recognizeText(cropped);
+    return ocrText;
   }
 }

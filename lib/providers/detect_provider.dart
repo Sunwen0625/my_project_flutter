@@ -180,7 +180,7 @@ class DetectProvider with ChangeNotifier {
         normalizedBox: result.normalizedBox,
         index:  index,
       );
-      ocrText =await getOCRText(croppedFile);
+      ocrText =await OcrUtil.getOCRText(croppedFile);
 
       _croppedList.add(_CroppedObject(
         file: croppedFile,
@@ -209,10 +209,6 @@ class DetectProvider with ChangeNotifier {
 
 }
 
-Future<String?> getOCRText(File cropped) async {
-  var ocrText = await OcrUtil.recognizeText(cropped);
-  return ocrText;
-}
 class _CroppedObject {
   final File file;
   final String label;
