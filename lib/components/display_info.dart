@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/providers/state_provider.dart';
+
 
 import '../providers/detect_provider.dart';
 import 'package:provider/provider.dart';
@@ -63,27 +63,27 @@ class DisplayInfo extends StatelessWidget {
             child: const Text("修改設定"),
           ),
           const SizedBox(height: 10),
-          Consumer<StateProvider>(builder:(context, state, child){
+          Consumer<DetectProvider>(builder:(context, detect, child){
             return Column(
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    state.toggleDevMode();
+                    detect.toggleDevMode();
                   },
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.all(
-                      state.isDevMode ? Colors.green : Colors.red,
+                      detect.isDevMode ? Colors.green : Colors.red,
                     ),
                     foregroundColor: WidgetStateProperty.all(Colors.white),
                   ),
                   child: const Text("開發者模式"),
                 ),
                 // 🔽 YOLO 模型選擇（僅在開發者模式開啟時顯示）
-                if (state.isDevMode)
+                if (detect.isDevMode)
                   Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: DropdownButtonFormField<String>(
-                      initialValue: state.selectedYoloModel, // 預設選中的模型（你需要在 StateProvider 裡定義）
+                      initialValue: detect.selectedYoloModel, // 預設選中的模型（你需要在 StateProvider 裡定義）
                       decoration: const InputDecoration(
                         labelText: "選擇 YOLO 模型",
                         border: OutlineInputBorder(),
@@ -91,7 +91,7 @@ class DisplayInfo extends StatelessWidget {
                       items: menuItem,
                       onChanged: (value) {
                         if (value != null) {
-                          state.setYoloModel(value); // 這裡去更新選擇的模型
+                          detect.setYoloModel(value); // 這裡去更新選擇的模型
                         }
                       },
                     ),

@@ -24,8 +24,48 @@ class DetectProvider with ChangeNotifier {
   }
   final controller = YOLOViewController();
 
+
+  bool _isDevMode = false;
+  bool get isDevMode => _isDevMode;
+
+  String _selectedYoloModel = ''; // 預設值
+  String get selectedYoloModel => _selectedYoloModel;
+
+  bool _isCameraActive = false; //  新增相機狀態
+  bool get isCameraActive => _isCameraActive;
+
+
   void changeModel(String modelPath){
     controller.switchModel(modelPath,YOLOTask.detect);
+  }
+  void toggleDevMode() {
+    _isDevMode = !_isDevMode;
+    notifyListeners();
+  }
+
+  // 📷 切換相機按鈕狀態
+  void toggleCamera() {
+    _isCameraActive = !_isCameraActive;
+    debugPrint("📸 Camera active: $_isCameraActive");
+
+    if (_isCameraActive) {
+      // ✅ 啟用 YOLO 模型
+      changeModel("redline_plus_int8");
+      debugPrint("🚀 啟用 YOLO 模型：$_selectedYoloModel");
+    } else {
+      // ❌ 關閉模型或停止動作
+      debugPrint("🛑 停止 YOLO 模型");
+      changeModel("");
+    }
+
+    notifyListeners();
+  }
+
+  void setYoloModel(String model) {
+    _selectedYoloModel = model;
+    debugPrint("🧠 已選擇 YOLO 模型：$_selectedYoloModel");
+    changeModel(_selectedYoloModel);
+    notifyListeners();
   }
 
   // 取得 GPS 跟地址
@@ -157,6 +197,7 @@ class DetectProvider with ChangeNotifier {
         licensePlate: ocrText??'',
       );
 
+      //添加歷史紀錄內
       _photoProvider?.addPhoto(photo);
 
       debugPrint("✅ 已裁切: ${result.className} → ${croppedFile.path}");

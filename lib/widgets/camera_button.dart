@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:my_project/providers/state_provider.dart';
+
 import 'package:provider/provider.dart';
+import '../providers/detect_provider.dart';
 
 
 
@@ -12,7 +13,7 @@ class CameraButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<StateProvider>(
+    return Consumer<DetectProvider>(
       builder: (context, state, child) {
         return FloatingActionButton(
           onPressed: () {

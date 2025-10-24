@@ -4,7 +4,7 @@ import 'package:ultralytics_yolo/ultralytics_yolo.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/detect_provider.dart';
-import '../providers/state_provider.dart';
+
 import '../providers/track_provider.dart';
 import '../trackers/centroid_tracker.dart';
 import '../utils/permission_utils.dart';
@@ -39,7 +39,7 @@ class _CameraYoloDetectState extends State<CameraYoloDetect> {
   Widget build(BuildContext context) {
     final detect = context.read<DetectProvider>();
     final track = context.read<TrackProvider>();
-    final model = context.read<StateProvider>().selectedYoloModel;
+    final model = detect.selectedYoloModel;
 
 
 

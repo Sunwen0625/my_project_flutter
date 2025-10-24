@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_project/providers/photo_provider.dart';
-import 'package:my_project/providers/state_provider.dart';
 import 'package:my_project/providers/track_provider.dart';
 import 'package:my_project/routes/app_routes.dart';
 import 'package:provider/provider.dart';
@@ -19,13 +18,6 @@ void main() {
           update: (_, photo, detect) {
             detect!.setPhotoProvider(photo);
             return detect;
-          },
-        ),
-        ChangeNotifierProxyProvider<DetectProvider,StateProvider>(
-          create: (_) => StateProvider(),
-          update: (_, detect, state) {
-            state!.setDetect(detect);
-            return state;
           },
         ),
         ChangeNotifierProxyProvider<DetectProvider,TrackProvider>(
