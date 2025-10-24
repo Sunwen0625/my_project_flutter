@@ -8,6 +8,7 @@ import 'package:my_project/utils/current_time_utils.dart';
 import 'package:ultralytics_yolo/ultralytics_yolo.dart';
 
 
+import '../models/cropped_object.dart';
 import '../models/photo_model.dart';
 import '../utils/capture_util.dart';
 import '../utils/flashlight_util.dart';
@@ -153,8 +154,8 @@ class DetectProvider with ChangeNotifier {
 
   //裁切圖片(可多張)
   // 裁切結果（多張）
-  final List<_CroppedObject> _croppedList = [];
-  List<_CroppedObject> get croppedList => _croppedList;
+  final List<CroppedObject> _croppedList = [];
+  List<CroppedObject> get croppedList => _croppedList;
   String? ocrText = "";
 
   Future<void> cropAllDetectedObjects() async {
@@ -182,7 +183,7 @@ class DetectProvider with ChangeNotifier {
       );
       ocrText =await OcrUtil.getOCRText(croppedFile);
 
-      _croppedList.add(_CroppedObject(
+      _croppedList.add(CroppedObject(
         file: croppedFile,
         label: result.className,
         confidence: result.confidence,
@@ -209,9 +210,3 @@ class DetectProvider with ChangeNotifier {
 
 }
 
-class _CroppedObject {
-  final File file;
-  final String label;
-  final double confidence;
-  _CroppedObject({required this.file, required this.label, required this.confidence});
-}
