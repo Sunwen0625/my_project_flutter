@@ -215,6 +215,9 @@ class DetectProvider with ChangeNotifier {
         continue; // 不加入有效配對
       }
 
+      // 測試 增強效果
+      //final enhancedImage = await OcrUtil.getEnhancedImage(plateFile);
+
 
       final carFile = await ImageCropUtil.cropByNormalizedBox(
         imageFile: imageFile,
