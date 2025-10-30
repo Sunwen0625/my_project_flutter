@@ -53,6 +53,7 @@ class _CameraYoloDetectState extends State<CameraYoloDetect> {
                modelPath: model,
               task: YOLOTask.detect,
               controller: detect.controller,
+              showOverlays: false,
               onResult: (results) {
 
                 debugPrint('Found ${results.length} objects!');

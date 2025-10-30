@@ -1,5 +1,6 @@
 
-import 'package:ultralytics_yolo/yolo_view.dart';
+import 'package:ultralytics_yolo/widgets/yolo_controller.dart';
+
 
 
 class FlashlightUtil {

@@ -6,11 +6,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:my_project/providers/photo_provider.dart';
 import 'package:my_project/utils/current_time_utils.dart';
 import 'package:ultralytics_yolo/ultralytics_yolo.dart';
+import 'package:ultralytics_yolo/widgets/yolo_controller.dart';
 
 
 import '../models/cropped_object.dart';
 import '../models/photo_model.dart';
 import '../utils/capture_util.dart';
+import '../utils/detect_validator.dart';
 import '../utils/flashlight_util.dart';
 import '../utils/image_crop_util.dart';
 import '../utils/location_utils.dart';
@@ -138,24 +140,42 @@ class DetectProvider with ChangeNotifier {
     // YOLOResult{classIndex: 63, className: laptop, confidence: 0.865234375, boundingBox: Rect.fromLTRB(28.1, 0.0, 414.6, 386.9)},
     // YOLOResult{classIndex: 66, className: keyboard, confidence: 0.505859375, boundingBox: Rect.fromLTRB(16.8, 399.2, 473.6, 504.5)}
     // ]
+    final DetectValidator validator = DetectValidator(selectedYoloModel);
+    final isReadyToCrop = _pendingCrop && lastCapture != null;
+    final hasValidSizeObject = results.any(
+          (r) => validator.isObjectLargeEnough(
+        r.className,
+        r.normalizedBox.width,
+        r.normalizedBox.height,
+      ),
+    );
+
+    final hasValidateResults = validator.validateResults(results);
+
+    final shouldCropNow = isReadyToCrop  && hasValidateResults ;
+
     _results = results;
+
     debugPrint("🔍 偵測到 ${results.length} 個物件");
     for (var r in results) {
-      debugPrint("🟦 ${r.className} (${(r.confidence * 100).toStringAsFixed(1)}%) "
-          "→ ${r.normalizedBox}");
+      debugPrint(
+        "🟦 ${r.className} (${(r.confidence * 100).toStringAsFixed(1)}%) "
+            "→ ${r.normalizedBox}",
+      );
     }
+
     notifyListeners();
     // ✅ 若剛拍完照且偵測完成，就立即裁切
-    if (_pendingCrop && lastCapture != null && _results.isNotEmpty) {
+    if (shouldCropNow) {
       _pendingCrop = false;
       await cropAllDetectedObjects();
+
     }
   }
 
   //裁切圖片(可多張)
   // 裁切結果（多張）
-  final List<CroppedObject> _croppedList = [];
-  List<CroppedObject> get croppedList => _croppedList;
+
   String? ocrText = "";
 
   Future<void> cropAllDetectedObjects() async {
@@ -169,25 +189,37 @@ class DetectProvider with ChangeNotifier {
     }
 
     final imageFile = lastCapture!;
-    _croppedList.clear();
+
 
 
     debugPrint("✂️ 開始裁切 ${_results.length} 個物件...");
     int index = 0;
 
     for (final result in _results) {
+      // 🚫 忽略 MIU 類別
+      if (result.className == 'MIU') {
+        debugPrint("⏭ 跳過 MIU 類別，不進行裁切");
+        continue;
+      }
       final croppedFile = await ImageCropUtil.cropByNormalizedBox(
         imageFile: imageFile,
         normalizedBox: result.normalizedBox,
-        index:  index,
+        index: index,
       );
-      ocrText =await OcrUtil.getOCRText(croppedFile);
+      // 📝 OCR 文字
+      if (result.className=='licence plate'){
+        final regex = RegExp(r'^[A-Za-z]{3}[-._~]?\d{4}$');
+        ocrText = await OcrUtil.getOCRText(croppedFile);
 
-      _croppedList.add(CroppedObject(
-        file: croppedFile,
-        label: result.className,
-        confidence: result.confidence,
-      ));
+        if (ocrText != null && regex.hasMatch(ocrText!)) {
+          debugPrint("📝 OCR 文字：$ocrText");
+        } else {
+          debugPrint("⚠️ OCR 文字無效，不進行裁切");
+          ocrText = null;
+          continue;
+        }
+      }
+
       final photo = PhotoModel(
         imagePath: imageFile,
         cutImagePath: croppedFile,
@@ -195,7 +227,7 @@ class DetectProvider with ChangeNotifier {
         address: address ?? '未知地點',
         longitude: lngString ?? '',
         latitude: latString ?? '',
-        licensePlate: ocrText??'',
+        licensePlate: ocrText ?? '',
       );
 
       //添加歷史紀錄內
