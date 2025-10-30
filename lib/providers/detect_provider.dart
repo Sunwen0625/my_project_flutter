@@ -9,7 +9,7 @@ import 'package:ultralytics_yolo/ultralytics_yolo.dart';
 import 'package:ultralytics_yolo/widgets/yolo_controller.dart';
 
 
-import '../models/cropped_object.dart';
+
 import '../models/photo_model.dart';
 import '../utils/capture_util.dart';
 import '../utils/detect_validator.dart';
