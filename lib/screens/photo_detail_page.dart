@@ -24,10 +24,16 @@ class PhotoDetailPage extends StatelessWidget {
                 Image.file(photo.imagePath, width: double.infinity, fit: BoxFit.cover),
                 const SizedBox(height: 16),
         
-                // 裁切圖片
-                Text("裁切圖片", style: Theme.of(context).textTheme.titleMedium),
+                // 裁切汽車圖片
+                Text("裁切違規車輛圖片", style: Theme.of(context).textTheme.titleMedium),
                 const SizedBox(height: 8),
-                Image.file(photo.cutImagePath, width: double.infinity, fit: BoxFit.cover),
+                Image.file(photo.cutCarImagePath, width: double.infinity, fit: BoxFit.cover),
+                const SizedBox(height: 16),
+
+                // 裁切車牌圖片
+                Text("裁切車牌圖片", style: Theme.of(context).textTheme.titleMedium),
+                const SizedBox(height: 8),
+                Image.file(photo.cutLicensePlateImagePath, width: double.infinity, fit: BoxFit.cover),
                 const SizedBox(height: 16),
         
                 // 文字資訊

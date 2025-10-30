@@ -41,7 +41,7 @@ class CameraButton extends StatelessWidget {
           */
           },
           shape: const CircleBorder(),
-          backgroundColor: state.isCameraActive ? Colors.red : Colors.blue,
+          backgroundColor: state.isCameraActive ? Colors.red : Colors.purple[900],
           child: Icon(
             state.isCameraActive ? Icons.cancel : Icons.camera_alt,
             size: 40,

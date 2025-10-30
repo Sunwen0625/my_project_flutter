@@ -22,11 +22,11 @@ class PhotoCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 圖片
+            // 違規汽車圖片
             ClipRRect(
               borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
               child: Image.file(
-                photo.cutImagePath,
+                photo.cutCarImagePath,
                 width: double.infinity,
                 height: 180,
                 fit: BoxFit.cover,

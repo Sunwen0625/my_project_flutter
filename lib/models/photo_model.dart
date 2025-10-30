@@ -2,7 +2,8 @@ import 'dart:io';
 
 class PhotoModel {
   final File imagePath;
-  final File cutImagePath;
+  final File cutCarImagePath;
+  final File cutLicensePlateImagePath;
   final String date;
   final String address;
   final String longitude;
@@ -12,7 +13,8 @@ class PhotoModel {
 
   PhotoModel( {
     required this.imagePath,
-    required this.cutImagePath,
+    required this.cutCarImagePath,
+    required this.cutLicensePlateImagePath,
     required this.date,
     required this.address,
     required this.longitude,

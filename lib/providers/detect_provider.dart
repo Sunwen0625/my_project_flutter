@@ -168,7 +168,7 @@ class DetectProvider with ChangeNotifier {
     // ✅ 若剛拍完照且偵測完成，就立即裁切
     if (shouldCropNow) {
       _pendingCrop = false;
-      await cropAllDetectedObjects();
+      await cropAllDetectedObjects( validator);
 
     }
   }
@@ -178,7 +178,7 @@ class DetectProvider with ChangeNotifier {
 
   String? ocrText = "";
 
-  Future<void> cropAllDetectedObjects() async {
+  Future<void> cropAllDetectedObjects(DetectValidator validator) async {
     if (lastCapture == null) {
       debugPrint("⚠️ 尚未有圖片可裁切");
       return;
@@ -187,42 +187,49 @@ class DetectProvider with ChangeNotifier {
       debugPrint("⚠️ 尚未有偵測結果");
       return;
     }
-
     final imageFile = lastCapture!;
+    final validGroups = validator.getValidGroups(_results);
+
+    if (validGroups.isEmpty) { debugPrint("⚠️ 沒有符合條件的組合，不裁切"); return; }
 
 
-
-    debugPrint("✂️ 開始裁切 ${_results.length} 個物件...");
+    debugPrint("✂️ 開始裁切 ${validGroups.length} 組符合條件的物件...");
     int index = 0;
 
-    for (final result in _results) {
-      // 🚫 忽略 MIU 類別
-      if (result.className == 'MIU') {
-        debugPrint("⏭ 跳過 MIU 類別，不進行裁切");
-        continue;
-      }
-      final croppedFile = await ImageCropUtil.cropByNormalizedBox(
+    for (final group in validGroups) {
+      final plate = group[0]; // licence plate
+      final car = group[1]; // car
+      // final iou = group[2]; // MIU (不裁)
+
+      final plateFile = await ImageCropUtil.cropByNormalizedBox(
         imageFile: imageFile,
-        normalizedBox: result.normalizedBox,
+        normalizedBox: plate.normalizedBox,
         index: index,
       );
-      // 📝 OCR 文字
-      if (result.className=='licence plate'){
-        final regex = RegExp(r'^[A-Za-z]{3}[-._~]?\d{4}$');
-        ocrText = await OcrUtil.getOCRText(croppedFile);
 
-        if (ocrText != null && regex.hasMatch(ocrText!)) {
-          debugPrint("📝 OCR 文字：$ocrText");
+      // 📝 OCR 文字
+      final text = await OcrUtil.getOCRText(plateFile);
+      final regex = RegExp(r'^[A-Za-z]{3}[-._~]?\d{4}$');
+
+        if (text != null && regex.hasMatch(text)) {
+          debugPrint("📝 OCR 文字：$text");
+          ocrText = text;
         } else {
-          debugPrint("⚠️ OCR 文字無效，不進行裁切");
-          ocrText = null;
-          continue;
+          debugPrint("⚠️ OCR 文字無效 $text");
+         // ocrText = null;
+          ocrText = text;
         }
-      }
+
+    final carFile = await ImageCropUtil.cropByNormalizedBox(
+      imageFile: imageFile,
+      normalizedBox: car.normalizedBox,
+      index: index + 1,
+    );
 
       final photo = PhotoModel(
         imagePath: imageFile,
-        cutImagePath: croppedFile,
+        cutCarImagePath: carFile,
+        cutLicensePlateImagePath:plateFile ,
         date: DateTime.now().toString().split('.')[0],
         address: address ?? '未知地點',
         longitude: lngString ?? '',
@@ -233,7 +240,7 @@ class DetectProvider with ChangeNotifier {
       //添加歷史紀錄內
       _photoProvider?.addPhoto(photo);
 
-      debugPrint("✅ 已裁切: ${result.className} → ${croppedFile.path}");
+      debugPrint("✅ 已裁切車子並儲存紀錄: ${carFile.path}");
       index++;
     }
     notifyListeners();
