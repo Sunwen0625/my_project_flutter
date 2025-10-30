@@ -8,28 +8,44 @@ class ImageCropUtil {
     required File imageFile,
     required Rect normalizedBox,
     int? index,
+    double expandRatio = 0.1, // 預設擴張 10%
   }) async {
     final bytes = await imageFile.readAsBytes();
     final image = img.decodeImage(bytes);
     if (image == null) throw Exception("無法讀取圖片");
 
-    final imgW = image.width;
-    final imgH = image.height;
+    final imgW = image.width.toDouble();
+    final imgH = image.height.toDouble();
+
+    // ✳️ 擴張 normalized box（中心不變，寬高放大）
+    double width = normalizedBox.width;
+    double height = normalizedBox.height;
+    double centerX = normalizedBox.left + width / 2;
+    double centerY = normalizedBox.top + height / 2;
+
+    width *= (1 + expandRatio);
+    height *= (1 + expandRatio);
 
     // ✳️ 把比例轉成實際像素
-    final left = (normalizedBox.left * imgW).clamp(0, imgW - 1);
-    final top = (normalizedBox.top * imgH).clamp(0, imgH - 1);
-    final right = (normalizedBox.right * imgW).clamp(0, imgW);
-    final bottom = (normalizedBox.bottom * imgH).clamp(0, imgH);
+    double left = (centerX - width / 2).clamp(0.0, 1.0);
+    double top = (centerY - height / 2).clamp(0.0, 1.0);
+    double right = (centerX + width / 2).clamp(0.0, 1.0);
+    double bottom = (centerY + height / 2).clamp(0.0, 1.0);
 
-    final cropW = (right - left).round();
-    final cropH = (bottom - top).round();
+    // ✳️ 把比例轉成實際像素
+    final leftPx = (left * imgW).clamp(0, imgW - 1);
+    final topPx = (top * imgH).clamp(0, imgH - 1);
+    final rightPx = (right * imgW).clamp(0, imgW);
+    final bottomPx = (bottom * imgH).clamp(0, imgH);
+
+    final cropW = (rightPx - leftPx).round();
+    final cropH = (bottomPx - topPx).round();
 
     // 🔹 開始裁切
     final cropped = img.copyCrop(
       image,
-      x: left.round(),
-      y: top.round(),
+      x: leftPx.round(),
+      y: topPx.round(),
       width: cropW,
       height: cropH,
     );
@@ -40,10 +56,13 @@ class ImageCropUtil {
     final croppedFile = File(path);
     await croppedFile.writeAsBytes(img.encodePng(cropped));
 
-    print("📏 原圖大小: ${imgW}x${imgH}");
-    print("🔹 normalizedBox: $normalizedBox");
-    print("🎯 實際裁切座標: (${left.round()}, ${top.round()}) → ${cropW}x${cropH}");
+    debugPrint("📏 原圖大小: ${imgW.toInt()}x${imgH.toInt()}");
+    debugPrint("🔹 原 normalizedBox: $normalizedBox");
+    debugPrint("🔹 擴張後: L=$left, T=$top, R=$right, B=$bottom");
+    debugPrint("🎯 實際裁切: (${leftPx.round()}, ${topPx.round()}) → ${cropW}x$cropH");
 
     return croppedFile;
   }
+
+
 }

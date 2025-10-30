@@ -204,27 +204,24 @@ class DetectProvider with ChangeNotifier {
       final plateFile = await ImageCropUtil.cropByNormalizedBox(
         imageFile: imageFile,
         normalizedBox: plate.normalizedBox,
-        index: index,
+        index: index+1,
+        expandRatio: 0.25  // 車牌放大
       );
 
       // 📝 OCR 文字
-      final text = await OcrUtil.getOCRText(plateFile);
-      final regex = RegExp(r'^[A-Za-z]{3}[-._~]?\d{4}$');
+      final ocrText = await OcrUtil.recognizeText(plateFile);
+      if (!OcrUtil.isOcrTextValid(ocrText)) {
+        debugPrint("❌ OCR 無效文字: $ocrText，略過此組");
+        continue; // 不加入有效配對
+      }
 
-        if (text != null && regex.hasMatch(text)) {
-          debugPrint("📝 OCR 文字：$text");
-          ocrText = text;
-        } else {
-          debugPrint("⚠️ OCR 文字無效 $text");
-         // ocrText = null;
-          ocrText = text;
-        }
 
-    final carFile = await ImageCropUtil.cropByNormalizedBox(
-      imageFile: imageFile,
-      normalizedBox: car.normalizedBox,
-      index: index + 1,
-    );
+      final carFile = await ImageCropUtil.cropByNormalizedBox(
+        imageFile: imageFile,
+        normalizedBox: car.normalizedBox,
+        index: index + 1,
+        expandRatio: 0.1  // 車子建放大
+      );
 
       final photo = PhotoModel(
         imagePath: imageFile,
@@ -234,7 +231,7 @@ class DetectProvider with ChangeNotifier {
         address: address ?? '未知地點',
         longitude: lngString ?? '',
         latitude: latString ?? '',
-        licensePlate: ocrText ?? '',
+        licensePlate: ocrText ,
       );
 
       //添加歷史紀錄內

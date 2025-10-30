@@ -23,38 +23,36 @@ class OcrUtil {
       // 關閉辨識器
       await textRecognizer.close();
 
-      return result.text;
+      // 清理文字
+      String rawText = _cleanedText(result.text);
+      return rawText;
     } catch (e) {
       debugPrint("⚠️ OCR 辨識錯誤: $e");
       return "OCR 辨識失敗";
     }
   }
 
-  /// 辨識後回傳每個文字區塊資訊（含框框）
-  static Future<List<Map<String, dynamic>>> recognizeBlocks(File imageFile) async {
-    final List<Map<String, dynamic>> blocks = [];
-    try {
-      final inputImage = InputImage.fromFile(imageFile);
-      final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
-      final RecognizedText result = await textRecognizer.processImage(inputImage);
+  static String _cleanedText(String ocrText) {
+    // 🔹 清理步驟：
+    // 移除所有空白與換行
+    // 全部轉成大寫
+    // 將所有特殊符號（-_.~）轉換成 -
+    debugPrint("🧾 OCR 原始: $ocrText");
+    String cleanedText = ocrText
+      .toUpperCase() // 全部大寫
+      .replaceAll(RegExp(r'[-_.~]'), '-') //將所有特殊符號（-_.~）轉換成 -
+      .replaceAll(RegExp(r'\s+'), ''); // 移除空白與換行
 
-      for (var block in result.blocks) {
-        blocks.add({
-          'text': block.text,
-          'boundingBox': block.boundingBox.toString(),
-        });
-      }
 
-      await textRecognizer.close();
-      return blocks;
-    } catch (e) {
-      debugPrint("⚠️ OCR 區塊辨識錯誤: $e");
-      return [];
-    }
+    debugPrint("🧾 OCR 清理: $cleanedText");
+    return cleanedText;
   }
 
-  static Future<String?> getOCRText(File cropped) async {
-    var ocrText = await OcrUtil.recognizeText(cropped);
-    return ocrText;
+  static bool isOcrTextValid(String ocrText) {
+    final len = ocrText.length;
+    return ocrText.contains('-')
+        ? (len == 7 || len == 8)
+        : (len == 6 || len == 7);
   }
 }
+

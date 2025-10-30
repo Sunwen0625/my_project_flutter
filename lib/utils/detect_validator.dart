@@ -65,7 +65,7 @@ class DetectValidator {
 
       // car 與 MIU：需重疊或 car 在上方
       for (var iou in ious) {
-        if (_isAbove(car.boundingBox, iou.boundingBox) ||
+        if (_isAbove(car.boundingBox, iou.boundingBox) &&
             _isOverlap(car.boundingBox, iou.boundingBox)) {
           matchedIou = iou;
           break;
@@ -74,9 +74,12 @@ class DetectValidator {
 
       // car 與 licence plate：必須重疊
       for (var plate in plates) {
-        if (_isOverlap(car.boundingBox, plate.boundingBox)) {
+        if (_isOverlap(car.boundingBox, plate.boundingBox) &&
+            !_isTouchingEdge(plate.normalizedBox)) {
           matchedPlate = plate;
           break;
+        }else if (_isTouchingEdge(plate.normalizedBox)) {
+          debugPrint("⚠️ 車牌 ${plate.normalizedBox} 碰到邊界，略過此組");
         }
       }
 
@@ -102,5 +105,17 @@ class DetectValidator {
         a.right > b.left &&
         a.top < b.bottom &&
         a.bottom > b.top;
+  }
+
+  /// 🚫 判斷車牌框是否碰觸畫面邊緣
+  ///
+  /// 若 YOLO 使用 normalized 座標 (0~1)：可直接比較。
+  /// 若使用像素座標，請改成寬高實際值。
+  bool _isTouchingEdge(Rect box, {double tolerance = 0.001}) {
+    // normalized (0~1) 假設
+    return box.left < tolerance ||
+        box.top < tolerance ||
+        box.right > (1 - tolerance) ||
+        box.bottom > (1 - tolerance);
   }
 }

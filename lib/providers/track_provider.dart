@@ -39,8 +39,8 @@ class TrackProvider with ChangeNotifier {
   /// 當偵測到新物件出現時觸發
   void _onNewObjectDetected(Track track) async {
     debugPrint("🆕 新物件出現：#${track.id} ${track.label} (${track.score})");
-    _detectProvider?.fetchLocation();
-    _detectProvider?.captureImage();
+    await _detectProvider?.fetchLocation();
+    await _detectProvider?.captureImage();
 
   }
 
